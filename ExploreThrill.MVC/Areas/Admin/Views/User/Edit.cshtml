@@ -1,0 +1,28 @@
+﻿@model ExploreThrill.MVC.Areas.Admin.Models.EditUserViewModel
+
+@{
+    ViewData["Title"] = "Kullanıcıyı Düzenle";
+}
+
+<div class="container mt-5">
+    <h2>Kullanıcıyı Düzenle</h2>
+    <form asp-action="Edit" method="post">
+        <div class="form-group">
+            <label for="UserName">Kullanıcı Adı</label>
+            <input asp-for="UserName" class="form-control" />
+            <span asp-validation-for="UserName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label for="Email">Email</label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label for="TcNo">T.C. Kimlik No</label>
+            <input asp-for="TcNo" class="form-control" />
+            <span asp-validation-for="TcNo" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Kaydet</button>
+        <a href="@Url.Action("Index", "User")" class="btn btn-secondary">İptal</a>
+    </form>
+</div>

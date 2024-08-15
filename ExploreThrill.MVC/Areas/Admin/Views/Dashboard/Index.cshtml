@@ -1,0 +1,57 @@
+﻿@model ExploreThrill.MVC.Areas.Admin.Models.DashboardViewModel
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h1 class="display-4">Admin Dashboard</h1>
+            <p class="lead">Sisteme genel bir bakış</p>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-header">Toplam Kullanıcı Sayısı</div>
+                <div class="card-body">
+                    <h2 class="card-title">@Model.TotalUsers</h2>
+                    <p class="card-text">Sistemde kayıtlı toplam kullanıcı sayısı.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-header">Toplam Rol Sayısı</div>
+                <div class="card-body">
+                    <h2 class="card-title">@Model.TotalRoles</h2>
+                    <p class="card-text">Sistemde mevcut olan toplam rol sayısı.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card text-white bg-danger mb-3">
+                <div class="card-header">Toplam Admin Sayısı</div>
+                <div class="card-body">
+                    <h2 class="card-title">@Model.TotalAdmins</h2>
+                    <p class="card-text">Sistemdeki toplam admin kullanıcı sayısı.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Son Hareketler</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Sistem üzerinde son yapılan işlemler burada gösterilebilir.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
