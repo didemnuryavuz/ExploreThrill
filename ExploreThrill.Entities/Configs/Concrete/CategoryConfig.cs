@@ -15,12 +15,12 @@ namespace ExploreThrill.Entities.Configs.Concrete
 
             // Seed data
             builder.HasData(
-                new Category { Id = 1, CategoryName = "Su Sporları", CreateDate = DateTime.UtcNow },
-                new Category { Id = 2, CategoryName = "Doğa Etkinlikleri", CreateDate = DateTime.UtcNow },
-                new Category { Id = 3, CategoryName = "Adrenalin Etkinlikleri", CreateDate = DateTime.UtcNow },
-                new Category { Id = 4, CategoryName = "Kültürel Etkinlikler", CreateDate = DateTime.UtcNow },
-                new Category { Id = 5, CategoryName = "Günübirlik Etkinlikler", CreateDate = DateTime.UtcNow },
-                new Category { Id = 6, CategoryName = "Atölyeler", CreateDate = DateTime.UtcNow }
+                new Category { Id = 1, CategoryName = "Water Activity", CreateDate = DateTime.UtcNow },
+                new Category { Id = 2, CategoryName = "Nature Activity", CreateDate = DateTime.UtcNow },
+                new Category { Id = 3, CategoryName = "Adventure Activity", CreateDate = DateTime.UtcNow },
+                new Category { Id = 4, CategoryName = "Culture Activity", CreateDate = DateTime.UtcNow },
+                new Category { Id = 5, CategoryName = "Daily Activity", CreateDate = DateTime.UtcNow },
+                new Category { Id = 6, CategoryName = "Workshop", CreateDate = DateTime.UtcNow }
             );
         }
     }

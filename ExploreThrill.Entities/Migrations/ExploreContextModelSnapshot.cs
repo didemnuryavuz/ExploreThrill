@@ -22,49 +22,76 @@ namespace ExploreThrill.Entities.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ActivityCategory", b =>
-                {
-                    b.Property<int>("ActivitiesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CategoriesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ActivitiesId", "CategoriesId");
-
-                    b.HasIndex("CategoriesId");
-
-                    b.ToTable("ActivityCategory");
-                });
-
             modelBuilder.Entity("ActivityCity", b =>
                 {
-                    b.Property<int>("ActivitiesId")
+                    b.Property<int>("ActivityId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CitiesId")
+                    b.Property<int>("CityId")
                         .HasColumnType("int");
 
-                    b.HasKey("ActivitiesId", "CitiesId");
+                    b.HasKey("ActivityId", "CityId");
 
-                    b.HasIndex("CitiesId");
+                    b.HasIndex("CityId");
 
                     b.ToTable("ActivityCity");
-                });
 
-            modelBuilder.Entity("ActivityCompany", b =>
-                {
-                    b.Property<int>("ActivitiesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CompaniesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ActivitiesId", "CompaniesId");
-
-                    b.HasIndex("CompaniesId");
-
-                    b.ToTable("ActivityCompany");
+                    b.HasData(
+                        new
+                        {
+                            ActivityId = 1,
+                            CityId = 1
+                        },
+                        new
+                        {
+                            ActivityId = 1,
+                            CityId = 4
+                        },
+                        new
+                        {
+                            ActivityId = 2,
+                            CityId = 3
+                        },
+                        new
+                        {
+                            ActivityId = 3,
+                            CityId = 9
+                        },
+                        new
+                        {
+                            ActivityId = 4,
+                            CityId = 4
+                        },
+                        new
+                        {
+                            ActivityId = 5,
+                            CityId = 4
+                        },
+                        new
+                        {
+                            ActivityId = 5,
+                            CityId = 2
+                        },
+                        new
+                        {
+                            ActivityId = 6,
+                            CityId = 9
+                        },
+                        new
+                        {
+                            ActivityId = 6,
+                            CityId = 6
+                        },
+                        new
+                        {
+                            ActivityId = 7,
+                            CityId = 1
+                        },
+                        new
+                        {
+                            ActivityId = 7,
+                            CityId = 10
+                        });
                 });
 
             modelBuilder.Entity("ExploreThrill.Core.Entities.Concrete.MyUser", b =>
@@ -137,6 +164,25 @@ namespace ExploreThrill.Entities.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "99c113c8-3358-4c3f-b376-d16ae2947611",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "bdb65b1b-57a1-47f9-abab-5a297a96ca5e",
+                            Email = "admin@admin.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "admin@admin.com",
+                            NormalizedUserName = "admin@admin.com",
+                            PasswordHash = "AQAAAAIAAYagAAAAEDgwen5wue/zZZ3CWMUDyV+gLfZ8PbfnnCZcYi5U2zhgUqrTBQszatSCaYgn8JxDNw==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "",
+                            TcNo = "12345678955",
+                            TwoFactorEnabled = false,
+                            UserName = "admin@admin.com"
+                        });
                 });
 
             modelBuilder.Entity("ExploreThrill.Entities.Models.Concrete.Activity", b =>
@@ -158,6 +204,12 @@ namespace ExploreThrill.Entities.Migrations
                     b.Property<int>("Capacity")
                         .HasColumnType("int");
 
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
@@ -174,9 +226,99 @@ namespace ExploreThrill.Entities.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("CompanyId");
+
                     b.HasIndex("MyUserId");
 
                     b.ToTable("Activities");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ActivityDate = new DateTime(2024, 8, 17, 20, 5, 52, 44, DateTimeKind.Utc).AddTicks(4717),
+                            ActivityName = "Paragliding",
+                            Capacity = 10,
+                            CategoryId = 3,
+                            CompanyId = 1,
+                            CreateDate = new DateTime(2024, 8, 17, 23, 5, 52, 44, DateTimeKind.Local).AddTicks(4702),
+                            Description = "Fly over mountains",
+                            Price = 150.00m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ActivityDate = new DateTime(2024, 8, 17, 20, 5, 52, 44, DateTimeKind.Utc).AddTicks(4721),
+                            ActivityName = "Canoeing",
+                            Capacity = 8,
+                            CategoryId = 1,
+                            CompanyId = 4,
+                            CreateDate = new DateTime(2024, 8, 17, 23, 5, 52, 44, DateTimeKind.Local).AddTicks(4719),
+                            Description = "Explore rivers",
+                            Price = 100.00m
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ActivityDate = new DateTime(2024, 8, 17, 20, 5, 52, 44, DateTimeKind.Utc).AddTicks(4723),
+                            ActivityName = "Hot Air Ballooning",
+                            Capacity = 5,
+                            CategoryId = 2,
+                            CompanyId = 2,
+                            CreateDate = new DateTime(2024, 8, 17, 23, 5, 52, 44, DateTimeKind.Local).AddTicks(4722),
+                            Description = "See the world from above",
+                            Price = 200.00m
+                        },
+                        new
+                        {
+                            Id = 4,
+                            ActivityDate = new DateTime(2024, 8, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ActivityName = "Scuba Diving",
+                            Capacity = 10,
+                            CategoryId = 1,
+                            CompanyId = 4,
+                            CreateDate = new DateTime(2024, 8, 17, 23, 5, 52, 44, DateTimeKind.Local).AddTicks(4724),
+                            Description = "Explore the underwater world",
+                            Price = 250.00m
+                        },
+                        new
+                        {
+                            Id = 5,
+                            ActivityDate = new DateTime(2024, 8, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ActivityName = "Boat Tour",
+                            Capacity = 5,
+                            CategoryId = 5,
+                            CompanyId = 3,
+                            CreateDate = new DateTime(2024, 8, 17, 23, 5, 52, 44, DateTimeKind.Local).AddTicks(4727),
+                            Description = "Explore the sea",
+                            Price = 250.00m
+                        },
+                        new
+                        {
+                            Id = 6,
+                            ActivityDate = new DateTime(2024, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ActivityName = "Mountain Climbing",
+                            Capacity = 5,
+                            CategoryId = 2,
+                            CompanyId = 2,
+                            CreateDate = new DateTime(2024, 8, 17, 23, 5, 52, 44, DateTimeKind.Local).AddTicks(4729),
+                            Description = "Conquer the peaks",
+                            Price = 300.00m
+                        },
+                        new
+                        {
+                            Id = 7,
+                            ActivityDate = new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ActivityName = "Historical Tour",
+                            Capacity = 20,
+                            CategoryId = 4,
+                            CompanyId = 4,
+                            CreateDate = new DateTime(2024, 8, 17, 23, 5, 52, 44, DateTimeKind.Local).AddTicks(4731),
+                            Description = "Discover the ancient ruins",
+                            Price = 150.00m
+                        });
                 });
 
             modelBuilder.Entity("ExploreThrill.Entities.Models.Concrete.Category", b =>
@@ -211,38 +353,38 @@ namespace ExploreThrill.Entities.Migrations
                         new
                         {
                             Id = 1,
-                            CategoryName = "Su Sporları",
-                            CreateDate = new DateTime(2024, 8, 10, 13, 17, 4, 138, DateTimeKind.Utc).AddTicks(7214)
+                            CategoryName = "Water Activity",
+                            CreateDate = new DateTime(2024, 8, 17, 20, 5, 52, 44, DateTimeKind.Utc).AddTicks(7140)
                         },
                         new
                         {
                             Id = 2,
-                            CategoryName = "Doğa Etkinlikleri",
-                            CreateDate = new DateTime(2024, 8, 10, 13, 17, 4, 138, DateTimeKind.Utc).AddTicks(7216)
+                            CategoryName = "Nature Activity",
+                            CreateDate = new DateTime(2024, 8, 17, 20, 5, 52, 44, DateTimeKind.Utc).AddTicks(7142)
                         },
                         new
                         {
                             Id = 3,
-                            CategoryName = "Adrenalin Etkinlikleri",
-                            CreateDate = new DateTime(2024, 8, 10, 13, 17, 4, 138, DateTimeKind.Utc).AddTicks(7218)
+                            CategoryName = "Adventure Activity",
+                            CreateDate = new DateTime(2024, 8, 17, 20, 5, 52, 44, DateTimeKind.Utc).AddTicks(7143)
                         },
                         new
                         {
                             Id = 4,
-                            CategoryName = "Kültürel Etkinlikler",
-                            CreateDate = new DateTime(2024, 8, 10, 13, 17, 4, 138, DateTimeKind.Utc).AddTicks(7220)
+                            CategoryName = "Culture Activity",
+                            CreateDate = new DateTime(2024, 8, 17, 20, 5, 52, 44, DateTimeKind.Utc).AddTicks(7145)
                         },
                         new
                         {
                             Id = 5,
-                            CategoryName = "Günübirlik Etkinlikler",
-                            CreateDate = new DateTime(2024, 8, 10, 13, 17, 4, 138, DateTimeKind.Utc).AddTicks(7222)
+                            CategoryName = "Daily Activity",
+                            CreateDate = new DateTime(2024, 8, 17, 20, 5, 52, 44, DateTimeKind.Utc).AddTicks(7146)
                         },
                         new
                         {
                             Id = 6,
-                            CategoryName = "Atölyeler",
-                            CreateDate = new DateTime(2024, 8, 10, 13, 17, 4, 138, DateTimeKind.Utc).AddTicks(7224)
+                            CategoryName = "Workshop",
+                            CreateDate = new DateTime(2024, 8, 17, 20, 5, 52, 44, DateTimeKind.Utc).AddTicks(7147)
                         });
                 });
 
@@ -278,61 +420,61 @@ namespace ExploreThrill.Entities.Migrations
                         new
                         {
                             Id = 1,
-                            CreateDate = new DateTime(2024, 8, 10, 13, 17, 4, 139, DateTimeKind.Utc).AddTicks(618),
+                            CreateDate = new DateTime(2024, 8, 17, 20, 5, 52, 44, DateTimeKind.Utc).AddTicks(9188),
                             Name = "İstanbul"
                         },
                         new
                         {
                             Id = 2,
-                            CreateDate = new DateTime(2024, 8, 10, 13, 17, 4, 139, DateTimeKind.Utc).AddTicks(620),
+                            CreateDate = new DateTime(2024, 8, 17, 20, 5, 52, 44, DateTimeKind.Utc).AddTicks(9190),
                             Name = "Ankara"
                         },
                         new
                         {
                             Id = 3,
-                            CreateDate = new DateTime(2024, 8, 10, 13, 17, 4, 139, DateTimeKind.Utc).AddTicks(622),
+                            CreateDate = new DateTime(2024, 8, 17, 20, 5, 52, 44, DateTimeKind.Utc).AddTicks(9191),
                             Name = "İzmir"
                         },
                         new
                         {
                             Id = 4,
-                            CreateDate = new DateTime(2024, 8, 10, 13, 17, 4, 139, DateTimeKind.Utc).AddTicks(624),
+                            CreateDate = new DateTime(2024, 8, 17, 20, 5, 52, 44, DateTimeKind.Utc).AddTicks(9193),
                             Name = "Antalya"
                         },
                         new
                         {
                             Id = 5,
-                            CreateDate = new DateTime(2024, 8, 10, 13, 17, 4, 139, DateTimeKind.Utc).AddTicks(626),
+                            CreateDate = new DateTime(2024, 8, 17, 20, 5, 52, 44, DateTimeKind.Utc).AddTicks(9194),
                             Name = "Bursa"
                         },
                         new
                         {
                             Id = 6,
-                            CreateDate = new DateTime(2024, 8, 10, 13, 17, 4, 139, DateTimeKind.Utc).AddTicks(628),
+                            CreateDate = new DateTime(2024, 8, 17, 20, 5, 52, 44, DateTimeKind.Utc).AddTicks(9195),
                             Name = "Kastamonu"
                         },
                         new
                         {
                             Id = 7,
-                            CreateDate = new DateTime(2024, 8, 10, 13, 17, 4, 139, DateTimeKind.Utc).AddTicks(630),
+                            CreateDate = new DateTime(2024, 8, 17, 20, 5, 52, 44, DateTimeKind.Utc).AddTicks(9196),
                             Name = "Rize"
                         },
                         new
                         {
                             Id = 8,
-                            CreateDate = new DateTime(2024, 8, 10, 13, 17, 4, 139, DateTimeKind.Utc).AddTicks(632),
+                            CreateDate = new DateTime(2024, 8, 17, 20, 5, 52, 44, DateTimeKind.Utc).AddTicks(9197),
                             Name = "Gaziantep"
                         },
                         new
                         {
                             Id = 9,
-                            CreateDate = new DateTime(2024, 8, 10, 13, 17, 4, 139, DateTimeKind.Utc).AddTicks(634),
+                            CreateDate = new DateTime(2024, 8, 17, 20, 5, 52, 44, DateTimeKind.Utc).AddTicks(9198),
                             Name = "Şanlıurfa"
                         },
                         new
                         {
                             Id = 10,
-                            CreateDate = new DateTime(2024, 8, 10, 13, 17, 4, 139, DateTimeKind.Utc).AddTicks(636),
+                            CreateDate = new DateTime(2024, 8, 17, 20, 5, 52, 44, DateTimeKind.Utc).AddTicks(9199),
                             Name = "Mardin"
                         });
                 });
@@ -403,7 +545,7 @@ namespace ExploreThrill.Entities.Migrations
                             Id = 1,
                             Address = "Istanbul, Turkey",
                             CompanyName = "Turkish Travel",
-                            CreateDate = new DateTime(2024, 8, 10, 13, 17, 4, 139, DateTimeKind.Utc).AddTicks(5941),
+                            CreateDate = new DateTime(2024, 8, 17, 20, 5, 52, 45, DateTimeKind.Utc).AddTicks(3114),
                             Description = "Leading travel company in Turkey",
                             Email = "info@turkishtravel.com",
                             Phone = "00321234567",
@@ -414,7 +556,7 @@ namespace ExploreThrill.Entities.Migrations
                             Id = 2,
                             Address = "Ankara, Turkey",
                             CompanyName = "Anatolia Adventures",
-                            CreateDate = new DateTime(2024, 8, 10, 13, 17, 4, 139, DateTimeKind.Utc).AddTicks(5945),
+                            CreateDate = new DateTime(2024, 8, 17, 20, 5, 52, 45, DateTimeKind.Utc).AddTicks(3117),
                             Description = "Discover the beauty of Anatolia",
                             Email = "contact@anatoliaadventures.com",
                             Phone = "00337654321",
@@ -425,7 +567,7 @@ namespace ExploreThrill.Entities.Migrations
                             Id = 3,
                             Address = "Izmir, Turkey",
                             CompanyName = "Ege Tours",
-                            CreateDate = new DateTime(2024, 8, 10, 13, 17, 4, 139, DateTimeKind.Utc).AddTicks(5947),
+                            CreateDate = new DateTime(2024, 8, 17, 20, 5, 52, 45, DateTimeKind.Utc).AddTicks(3118),
                             Description = "Explore the Aegean coast",
                             Email = "support@egetours.com",
                             Phone = "00339876543",
@@ -436,7 +578,7 @@ namespace ExploreThrill.Entities.Migrations
                             Id = 4,
                             Address = "Antalya, Turkey",
                             CompanyName = "Antalya Getaways",
-                            CreateDate = new DateTime(2024, 8, 10, 13, 17, 4, 139, DateTimeKind.Utc).AddTicks(5950),
+                            CreateDate = new DateTime(2024, 8, 17, 20, 5, 52, 45, DateTimeKind.Utc).AddTicks(3120),
                             Description = "Your guide to Antalya",
                             Email = "info@antalyagetaways.com",
                             Phone = "00335432123",
@@ -447,84 +589,12 @@ namespace ExploreThrill.Entities.Migrations
                             Id = 5,
                             Address = "Mardin, Turkey",
                             CompanyName = "Mardin Travels",
-                            CreateDate = new DateTime(2024, 8, 10, 13, 17, 4, 139, DateTimeKind.Utc).AddTicks(5952),
+                            CreateDate = new DateTime(2024, 8, 17, 20, 5, 52, 45, DateTimeKind.Utc).AddTicks(3122),
                             Description = "Experience the historical city of Mardin",
                             Email = "info@mardintravels.com",
                             Phone = "00332109876",
                             Website = "www.mardintravels.com"
                         });
-                });
-
-            modelBuilder.Entity("ExploreThrill.Entities.Models.Concrete.Image", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ActivityId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("MyUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
-
-                    b.Property<string>("Path")
-                        .IsRequired()
-                        .HasMaxLength(400)
-                        .HasColumnType("nvarchar(400)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ActivityId");
-
-                    b.HasIndex("MyUserId");
-
-                    b.HasIndex("Path")
-                        .IsUnique();
-
-                    b.ToTable("Images");
-                });
-
-            modelBuilder.Entity("ExploreThrill.Entities.Models.Concrete.Review", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ActivityId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Comment")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("MyUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("Rating")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ActivityId");
-
-                    b.HasIndex("MyUserId");
-
-                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -552,6 +622,14 @@ namespace ExploreThrill.Entities.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "99c113c8-3358-4c3f-b376-d16ae29476b8",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -639,6 +717,13 @@ namespace ExploreThrill.Entities.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "99c113c8-3358-4c3f-b376-d16ae2947611",
+                            RoleId = "99c113c8-3358-4c3f-b376-d16ae29476b8"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -660,56 +745,42 @@ namespace ExploreThrill.Entities.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("ActivityCategory", b =>
-                {
-                    b.HasOne("ExploreThrill.Entities.Models.Concrete.Activity", null)
-                        .WithMany()
-                        .HasForeignKey("ActivitiesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ExploreThrill.Entities.Models.Concrete.Category", null)
-                        .WithMany()
-                        .HasForeignKey("CategoriesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("ActivityCity", b =>
                 {
                     b.HasOne("ExploreThrill.Entities.Models.Concrete.Activity", null)
                         .WithMany()
-                        .HasForeignKey("ActivitiesId")
+                        .HasForeignKey("ActivityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ExploreThrill.Entities.Models.Concrete.City", null)
                         .WithMany()
-                        .HasForeignKey("CitiesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("ActivityCompany", b =>
-                {
-                    b.HasOne("ExploreThrill.Entities.Models.Concrete.Activity", null)
-                        .WithMany()
-                        .HasForeignKey("ActivitiesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ExploreThrill.Entities.Models.Concrete.Company", null)
-                        .WithMany()
-                        .HasForeignKey("CompaniesId")
+                        .HasForeignKey("CityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("ExploreThrill.Entities.Models.Concrete.Activity", b =>
                 {
+                    b.HasOne("ExploreThrill.Entities.Models.Concrete.Category", "Category")
+                        .WithMany("Activities")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ExploreThrill.Entities.Models.Concrete.Company", "Company")
+                        .WithMany("Activities")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ExploreThrill.Core.Entities.Concrete.MyUser", "MyUser")
                         .WithMany()
                         .HasForeignKey("MyUserId");
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Company");
 
                     b.Navigation("MyUser");
                 });
@@ -737,40 +808,6 @@ namespace ExploreThrill.Entities.Migrations
                     b.HasOne("ExploreThrill.Core.Entities.Concrete.MyUser", "MyUser")
                         .WithMany()
                         .HasForeignKey("MyUserId");
-
-                    b.Navigation("MyUser");
-                });
-
-            modelBuilder.Entity("ExploreThrill.Entities.Models.Concrete.Image", b =>
-                {
-                    b.HasOne("ExploreThrill.Entities.Models.Concrete.Activity", "Activity")
-                        .WithMany("Images")
-                        .HasForeignKey("ActivityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ExploreThrill.Core.Entities.Concrete.MyUser", "MyUser")
-                        .WithMany()
-                        .HasForeignKey("MyUserId");
-
-                    b.Navigation("Activity");
-
-                    b.Navigation("MyUser");
-                });
-
-            modelBuilder.Entity("ExploreThrill.Entities.Models.Concrete.Review", b =>
-                {
-                    b.HasOne("ExploreThrill.Entities.Models.Concrete.Activity", "Activity")
-                        .WithMany("Reviews")
-                        .HasForeignKey("ActivityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ExploreThrill.Core.Entities.Concrete.MyUser", "MyUser")
-                        .WithMany()
-                        .HasForeignKey("MyUserId");
-
-                    b.Navigation("Activity");
 
                     b.Navigation("MyUser");
                 });
@@ -826,11 +863,14 @@ namespace ExploreThrill.Entities.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ExploreThrill.Entities.Models.Concrete.Activity", b =>
+            modelBuilder.Entity("ExploreThrill.Entities.Models.Concrete.Category", b =>
                 {
-                    b.Navigation("Images");
+                    b.Navigation("Activities");
+                });
 
-                    b.Navigation("Reviews");
+            modelBuilder.Entity("ExploreThrill.Entities.Models.Concrete.Company", b =>
+                {
+                    b.Navigation("Activities");
                 });
 #pragma warning restore 612, 618
         }

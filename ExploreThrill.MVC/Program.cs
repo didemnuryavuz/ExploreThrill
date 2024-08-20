@@ -24,6 +24,8 @@ namespace ExploreThrill.MVC
             // Diðer servisleri ekle
             builder.Services.AddExploreThrillServices();
 
+
+
             //Ýdentity ekle
             builder.Services.AddIdentity<MyUser, IdentityRole>()
                 .AddEntityFrameworkStores<ExploreContext>()
@@ -34,12 +36,6 @@ namespace ExploreThrill.MVC
 
             var app = builder.Build();
 
-            //// Rolleri ve Admin kullanýcýyý seed et
-            //using (var scope = app.Services.CreateScope())
-            //{
-            //    var services = scope.ServiceProvider;
-            //    SeedRolesAndAdminUser(services).Wait();
-            //}
 
 
             // Configure the HTTP request pipeline.
@@ -71,42 +67,8 @@ namespace ExploreThrill.MVC
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.Run();
-        }
-        public static async Task SeedRolesAndAdminUser(IServiceProvider serviceProvider)
-        {
-            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            var userManager = serviceProvider.GetRequiredService<UserManager<MyUser>>();
 
-            string[] roleNames = { "Admin", "User" };
-            IdentityResult roleResult;
 
-            foreach (var roleName in roleNames)
-            {
-                var roleExist = await roleManager.RoleExistsAsync(roleName);
-                if (!roleExist)
-                {
-                    roleResult = await roleManager.CreateAsync(new IdentityRole(roleName));
-                }
-            }
-
-            // Admin kullanýcýsýný oluþtur
-            var adminUser = new MyUser
-            {
-                UserName = "admin@admin.com",
-                Email = "admin@admin.com"
-            };
-
-            string adminPassword = "Admin123!";
-            var user = await userManager.FindByEmailAsync("admin@admin.com");
-
-            if (user == null)
-            {
-                var createAdminUser = await userManager.CreateAsync(adminUser, adminPassword);
-                if (createAdminUser.Succeeded)
-                {
-                    await userManager.AddToRoleAsync(adminUser, "Admin");
-                }
-            }
         }
 
     }

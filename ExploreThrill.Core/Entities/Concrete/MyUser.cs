@@ -6,5 +6,6 @@ namespace ExploreThrill.Core.Entities.Concrete
     {
         public string TcNo { get; set; }
         public bool? Gender { get; set; }
+
     }
 }

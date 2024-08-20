@@ -1,6 +1,8 @@
 ﻿using ExploreThrill.BL.Abstract;
+using ExploreThrill.Entities.Contexts;
 using ExploreThrill.Entities.Models.Concrete;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExploreThrill.MVC.Controllers
@@ -8,166 +10,161 @@ namespace ExploreThrill.MVC.Controllers
     public class ActivityController : Controller
     {
         private readonly IActivityManager _activityManager;
-        private readonly ICityManager _cityManager;
         private readonly ICategoryManager _categoryManager;
         private readonly ICompanyManager _companyManager;
+        private readonly ICityManager _cityManager;
+        private readonly ExploreContext _context;
 
-        public ActivityController(IActivityManager activityManager, ICityManager cityManager, ICategoryManager categoryManager, ICompanyManager companyManager)
+        public ActivityController(
+            IActivityManager activityManager,
+            ICategoryManager categoryManager,
+            ICompanyManager companyManager,
+            ICityManager cityManager,
+            ExploreContext context
+            )
         {
             _activityManager = activityManager;
-            _cityManager = cityManager;
             _categoryManager = categoryManager;
             _companyManager = companyManager;
+            _cityManager = cityManager;
+            _context = context;
         }
 
-        // GET: Activity
+        private async Task LoadViewBags()
+        {
+            ViewBag.Categories = new SelectList(await _categoryManager.GetAllAsync(null), "Id", "CategoryName");
+            ViewBag.Companies = new SelectList(await _companyManager.GetAllAsync(null), "Id", "CompanyName");
+            ViewBag.Cities = new SelectList(await _cityManager.GetAllAsync(null), "Id", "CityName");
+        }
+
         public async Task<IActionResult> Index()
         {
-            var activities = await _activityManager.GetAllIncludeAsync(
-                null,
-                a => a.Images,
-                a => a.Reviews,
-                a => a.Cities,
-                a => a.Categories,
-                a => a.Companies);
-
+            var activities = await _activityManager.GetAllIncludeAsync(null, x => x.Category, x => x.Company, x => x.Cities);
             return View(activities);
         }
 
-        // GET: Activity/Details/5
-        public async Task<IActionResult> Details(int id)
-        {
-            var activity = (await _activityManager.GetAllIncludeAsync(
-                a => a.Id == id,
-                a => a.Images,
-                a => a.Reviews,
-                a => a.Cities,
-                a => a.Categories,
-                a => a.Companies)).FirstOrDefault();
-
-            if (activity == null)
-            {
-                return NotFound();
-            }
-
-            return View(activity);
-        }
-
-        // GET: Activity/Create
+        [HttpGet]
         public async Task<IActionResult> Create()
         {
-            ViewData["Cities"] = await _cityManager.GetAllAsync(null);
-            ViewData["Categories"] = await _categoryManager.GetAllAsync(null);
-            ViewData["Companies"] = await _companyManager.GetAllAsync(null);
-            return View();
+
+            var categories = _context.Categories.ToList();
+            var cities = _context.Cities.ToList();
+            var companies = _context.Companies.ToList();
+            var newModel = new ActivityViewModel()
+            {
+                Categories = categories,
+                Cities = cities,
+                Companies = companies,
+            };
+
+            return View(newModel);
         }
 
-        // POST: Activity/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Activity activity, int[] selectedCities, int[] selectedCategories, int[] selectedCompanies)
+        public async Task<IActionResult> Create(ActivityViewModel model)
         {
             if (ModelState.IsValid)
             {
-                // Şehirler, kategoriler ve şirketler ile ilişkileri ayarlama
-                activity.Cities = (ICollection<City>)await _cityManager.GetByIdsAsync(selectedCities);
-                activity.Categories = (ICollection<Category>)await _categoryManager.GetByIdsAsync(selectedCategories);
-                activity.Companies = (ICollection<Company>)await _companyManager.GetByIdsAsync(selectedCompanies);
+                var activity = new Activity
+                {
+                    ActivityName = model.ActivityName,
+                    Description = model.Description,
+                    Capacity = model.Capacity,
+                    Price = model.Price,
+                    ActivityDate = model.ActivityDate,
+                    CategoryId = model.SelectedCategory,
+                    CompanyId = model.SelectedCompany,
+                    Cities = new List<City>()
 
+                };
+                foreach (var cityId in model.SelectedCities)
+                {
+                    var city = await _cityManager.GetByAsync(c => c.Id == cityId);
+                    if (city != null)
+                    {
+                        activity.Cities.Add(city);
+                    }
+                }
                 await _activityManager.AddAsync(activity);
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["Cities"] = await _cityManager.GetAllAsync(null);
-            ViewData["Categories"] = await _categoryManager.GetAllAsync(null);
-            ViewData["Companies"] = await _companyManager.GetAllAsync(null);
-            return View(activity);
+            await LoadViewBags();
+            return View(model);
         }
 
-        // GET: Activity/Edit/5
-        public async Task<IActionResult> Edit(int id)
-        {
-            var activity = (await _activityManager.GetAllIncludeAsync(
-                a => a.Id == id,
-                a => a.Cities,
-                a => a.Categories,
-                a => a.Companies)).FirstOrDefault();
+        #region Edit Düzenlenecek
+        //[HttpGet]
+        //public async Task<IActionResult> Edit(int id)
+        //{
+        //    var activity = _context.Activities.Include(x => x.Company).Include(x => x.Category).Include(x => x.Cities).Where(x => x.Id == id).FirstOrDefault();
 
-            if (activity == null)
-            {
-                return NotFound();
-            }
+        //    /// var activity = await _activityManager.GetByAsync(x => x.Id == id);
+        //    if (activity == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            ViewData["Cities"] = await _cityManager.GetAllAsync(null);
-            ViewData["Categories"] = await _categoryManager.GetAllAsync(null);
-            ViewData["Companies"] = await _companyManager.GetAllAsync(null);
+        //    var model = new ActivityViewModel
+        //    {
+        //        Id = activity.Id,
+        //        ActivityName = activity.ActivityName,
+        //        Description = activity.Description,
+        //        Capacity = activity.Capacity,
+        //        Price = activity.Price,
+        //        ActivityDate = activity.ActivityDate,
+        //        SelectedCategory = activity.CategoryId,
+        //        SelectedCompany = activity.CompanyId,
+        //        SelectedCities = activity.Cities.Select(c => c.Id).ToList()
+        //    };
 
-            return View(activity);
-        }
+        //    return View(model);
+        //}
 
-        // POST: Activity/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Activity activity, int[] selectedCities, int[] selectedCategories, int[] selectedCompanies)
-        {
-            if (id != activity.Id)
-            {
-                return NotFound();
-            }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Edit(int id, ActivityViewModel model)
+        //{
+        //    if (id != model.Id)
+        //    {
+        //        return NotFound();
+        //    }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    // Mevcut ilişkileri güncelleme
-                    var existingActivity = (await _activityManager.GetAllIncludeAsync(
-                        a => a.Id == id,
-                        a => a.Cities,
-                        a => a.Categories,
-                        a => a.Companies)).FirstOrDefault();
+        //    if (ModelState.IsValid)
+        //    {
+        //        var activity = _context.Activities.Include(x => x.Company).Include(x => x.Category).Include(x => x.Cities).Where(x => x.Id == id).FirstOrDefault();
 
-                    if (existingActivity == null)
-                    {
-                        return NotFound();
-                    }
+        //        // var activity = await _activityManager.GetByAsync(x => x.Id == id);
 
-                    existingActivity.ActivityName = activity.ActivityName;
-                    existingActivity.Description = activity.Description;
-                    existingActivity.Capacity = activity.Capacity;
-                    existingActivity.Price = activity.Price;
-                    existingActivity.ActivityDate = activity.ActivityDate;
+        //        if (activity == null)
+        //        {
+        //            return NotFound();
+        //        }
 
-                    existingActivity.Cities = (ICollection<City>)await _cityManager.GetByIdsAsync(selectedCities);
-                    existingActivity.Categories = (ICollection<Category>)await _categoryManager.GetByIdsAsync(selectedCategories);
-                    existingActivity.Companies = (ICollection<Company>)await _companyManager.GetByIdsAsync(selectedCompanies);
+        //        activity.ActivityName = model.ActivityName;
+        //        activity.Description = model.Description;
+        //        activity.Capacity = model.Capacity;
+        //        activity.Price = model.Price;
+        //        activity.ActivityDate = model.ActivityDate;
+        //        activity.CategoryId = model.SelectedCategory;
+        //        activity.CompanyId = model.SelectedCompany;
+        //        activity.Cities = model.SelectedCities.Select(cityId => new City { Id = cityId }).ToList();
 
-                    await _activityManager.UpdateAsync(existingActivity);
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!await ActivityExists(activity.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
+        //        await _activityManager.UpdateAsync(activity);
+        //        return RedirectToAction(nameof(Index));
+        //    }
 
-            ViewData["Cities"] = await _cityManager.GetAllAsync(null);
-            ViewData["Categories"] = await _categoryManager.GetAllAsync(null);
-            ViewData["Companies"] = await _companyManager.GetAllAsync(null);
+        //    //await LoadViewBags();
+        //    return View(model);
+        //} 
+        #endregion
 
-            return View(activity);
-        }
-
-        // GET: Activity/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
-            var activity = (await _activityManager.GetAllIncludeAsync(a => a.Id == id)).FirstOrDefault();
+            var activity = _context.Activities.Include(x => x.Company).Include(x => x.Category).Include(x => x.Cities).Where(x => x.Id == id).FirstOrDefault();
+
+
             if (activity == null)
             {
                 return NotFound();
@@ -176,23 +173,34 @@ namespace ExploreThrill.MVC.Controllers
             return View(activity);
         }
 
-        // POST: Activity/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var activity = (await _activityManager.GetAllIncludeAsync(a => a.Id == id)).FirstOrDefault();
-            if (activity != null)
+
+
+            var activity = await _activityManager.GetByAsync(x => x.Id == id);
+            if (activity == null)
             {
-                await _activityManager.DeleteAsync(activity);
+                return NotFound();
             }
+
+            await _activityManager.DeleteAsync(activity);
             return RedirectToAction(nameof(Index));
         }
 
-        private async Task<bool> ActivityExists(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            var activity = (await _activityManager.GetAllIncludeAsync(a => a.Id == id)).FirstOrDefault();
-            return activity != null;
+
+            var activity = _context.Activities.Include(x => x.Company).Include(x => x.Category).Include(x => x.Cities).Where(x => x.Id == id).FirstOrDefault();
+
+
+            if (activity == null)
+            {
+                return NotFound();
+            }
+
+            return View(activity);
         }
     }
 }

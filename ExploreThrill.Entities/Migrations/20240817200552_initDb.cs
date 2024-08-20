@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace ExploreThrill.Entities.Migrations
 {
     /// <inheritdoc />
@@ -30,6 +32,8 @@ namespace ExploreThrill.Entities.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    TcNo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Gender = table.Column<bool>(type: "bit", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -69,30 +73,6 @@ namespace ExploreThrill.Entities.Migrations
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Activities",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ActivityName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
-                    Capacity = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    ActivityDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    MyUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Activities", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Activities_AspNetUsers_MyUserId",
-                        column: x => x.MyUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -246,81 +226,39 @@ namespace ExploreThrill.Entities.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Images",
+                name: "Activities",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
-                    Path = table.Column<string>(type: "nvarchar(400)", maxLength: 400, nullable: false),
-                    ActivityId = table.Column<int>(type: "int", nullable: false),
+                    ActivityName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
+                    Capacity = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ActivityDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    CompanyId = table.Column<int>(type: "int", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     MyUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Images", x => x.Id);
+                    table.PrimaryKey("PK_Activities", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Images_Activities_ActivityId",
-                        column: x => x.ActivityId,
-                        principalTable: "Activities",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Images_AspNetUsers_MyUserId",
+                        name: "FK_Activities_AspNetUsers_MyUserId",
                         column: x => x.MyUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Reviews",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Rating = table.Column<int>(type: "int", nullable: false),
-                    Comment = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
-                    ActivityId = table.Column<int>(type: "int", nullable: false),
-                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    MyUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Reviews", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Reviews_Activities_ActivityId",
-                        column: x => x.ActivityId,
-                        principalTable: "Activities",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Reviews_AspNetUsers_MyUserId",
-                        column: x => x.MyUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ActivityCategory",
-                columns: table => new
-                {
-                    ActivitiesId = table.Column<int>(type: "int", nullable: false),
-                    CategoriesId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ActivityCategory", x => new { x.ActivitiesId, x.CategoriesId });
-                    table.ForeignKey(
-                        name: "FK_ActivityCategory_Activities_ActivitiesId",
-                        column: x => x.ActivitiesId,
-                        principalTable: "Activities",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ActivityCategory_Categories_CategoriesId",
-                        column: x => x.CategoriesId,
+                        name: "FK_Activities_Categories_CategoryId",
+                        column: x => x.CategoryId,
                         principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Activities_Companies_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -329,49 +267,124 @@ namespace ExploreThrill.Entities.Migrations
                 name: "ActivityCity",
                 columns: table => new
                 {
-                    ActivitiesId = table.Column<int>(type: "int", nullable: false),
-                    CitiesId = table.Column<int>(type: "int", nullable: false)
+                    ActivityId = table.Column<int>(type: "int", nullable: false),
+                    CityId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ActivityCity", x => new { x.ActivitiesId, x.CitiesId });
+                    table.PrimaryKey("PK_ActivityCity", x => new { x.ActivityId, x.CityId });
                     table.ForeignKey(
-                        name: "FK_ActivityCity_Activities_ActivitiesId",
-                        column: x => x.ActivitiesId,
+                        name: "FK_ActivityCity_Activities_ActivityId",
+                        column: x => x.ActivityId,
                         principalTable: "Activities",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ActivityCity_Cities_CitiesId",
-                        column: x => x.CitiesId,
+                        name: "FK_ActivityCity_Cities_CityId",
+                        column: x => x.CityId,
                         principalTable: "Cities",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "ActivityCompany",
-                columns: table => new
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[] { "99c113c8-3358-4c3f-b376-d16ae29476b8", null, "Admin", "ADMIN" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "Gender", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TcNo", "TwoFactorEnabled", "UserName" },
+                values: new object[] { "99c113c8-3358-4c3f-b376-d16ae2947611", 0, "bdb65b1b-57a1-47f9-abab-5a297a96ca5e", "admin@admin.com", true, null, false, null, "admin@admin.com", "admin@admin.com", "AQAAAAIAAYagAAAAEDgwen5wue/zZZ3CWMUDyV+gLfZ8PbfnnCZcYi5U2zhgUqrTBQszatSCaYgn8JxDNw==", null, false, "", "12345678955", false, "admin@admin.com" });
+
+            migrationBuilder.InsertData(
+                table: "Categories",
+                columns: new[] { "Id", "CategoryName", "CreateDate", "MyUserId" },
+                values: new object[,]
                 {
-                    ActivitiesId = table.Column<int>(type: "int", nullable: false),
-                    CompaniesId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ActivityCompany", x => new { x.ActivitiesId, x.CompaniesId });
-                    table.ForeignKey(
-                        name: "FK_ActivityCompany_Activities_ActivitiesId",
-                        column: x => x.ActivitiesId,
-                        principalTable: "Activities",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ActivityCompany_Companies_CompaniesId",
-                        column: x => x.CompaniesId,
-                        principalTable: "Companies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                    { 1, "Water Activity", new DateTime(2024, 8, 17, 20, 5, 52, 44, DateTimeKind.Utc).AddTicks(7140), null },
+                    { 2, "Nature Activity", new DateTime(2024, 8, 17, 20, 5, 52, 44, DateTimeKind.Utc).AddTicks(7142), null },
+                    { 3, "Adventure Activity", new DateTime(2024, 8, 17, 20, 5, 52, 44, DateTimeKind.Utc).AddTicks(7143), null },
+                    { 4, "Culture Activity", new DateTime(2024, 8, 17, 20, 5, 52, 44, DateTimeKind.Utc).AddTicks(7145), null },
+                    { 5, "Daily Activity", new DateTime(2024, 8, 17, 20, 5, 52, 44, DateTimeKind.Utc).AddTicks(7146), null },
+                    { 6, "Workshop", new DateTime(2024, 8, 17, 20, 5, 52, 44, DateTimeKind.Utc).AddTicks(7147), null }
                 });
+
+            migrationBuilder.InsertData(
+                table: "Cities",
+                columns: new[] { "Id", "CreateDate", "MyUserId", "Name" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2024, 8, 17, 20, 5, 52, 44, DateTimeKind.Utc).AddTicks(9188), null, "İstanbul" },
+                    { 2, new DateTime(2024, 8, 17, 20, 5, 52, 44, DateTimeKind.Utc).AddTicks(9190), null, "Ankara" },
+                    { 3, new DateTime(2024, 8, 17, 20, 5, 52, 44, DateTimeKind.Utc).AddTicks(9191), null, "İzmir" },
+                    { 4, new DateTime(2024, 8, 17, 20, 5, 52, 44, DateTimeKind.Utc).AddTicks(9193), null, "Antalya" },
+                    { 5, new DateTime(2024, 8, 17, 20, 5, 52, 44, DateTimeKind.Utc).AddTicks(9194), null, "Bursa" },
+                    { 6, new DateTime(2024, 8, 17, 20, 5, 52, 44, DateTimeKind.Utc).AddTicks(9195), null, "Kastamonu" },
+                    { 7, new DateTime(2024, 8, 17, 20, 5, 52, 44, DateTimeKind.Utc).AddTicks(9196), null, "Rize" },
+                    { 8, new DateTime(2024, 8, 17, 20, 5, 52, 44, DateTimeKind.Utc).AddTicks(9197), null, "Gaziantep" },
+                    { 9, new DateTime(2024, 8, 17, 20, 5, 52, 44, DateTimeKind.Utc).AddTicks(9198), null, "Şanlıurfa" },
+                    { 10, new DateTime(2024, 8, 17, 20, 5, 52, 44, DateTimeKind.Utc).AddTicks(9199), null, "Mardin" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Companies",
+                columns: new[] { "Id", "Address", "CompanyName", "CreateDate", "Description", "Email", "MyUserId", "Phone", "Website" },
+                values: new object[,]
+                {
+                    { 1, "Istanbul, Turkey", "Turkish Travel", new DateTime(2024, 8, 17, 20, 5, 52, 45, DateTimeKind.Utc).AddTicks(3114), "Leading travel company in Turkey", "info@turkishtravel.com", null, "00321234567", "www.turkishtravel.com" },
+                    { 2, "Ankara, Turkey", "Anatolia Adventures", new DateTime(2024, 8, 17, 20, 5, 52, 45, DateTimeKind.Utc).AddTicks(3117), "Discover the beauty of Anatolia", "contact@anatoliaadventures.com", null, "00337654321", "www.anatoliaadventures.com" },
+                    { 3, "Izmir, Turkey", "Ege Tours", new DateTime(2024, 8, 17, 20, 5, 52, 45, DateTimeKind.Utc).AddTicks(3118), "Explore the Aegean coast", "support@egetours.com", null, "00339876543", "www.egetours.com" },
+                    { 4, "Antalya, Turkey", "Antalya Getaways", new DateTime(2024, 8, 17, 20, 5, 52, 45, DateTimeKind.Utc).AddTicks(3120), "Your guide to Antalya", "info@antalyagetaways.com", null, "00335432123", "www.antalyagetaways.com" },
+                    { 5, "Mardin, Turkey", "Mardin Travels", new DateTime(2024, 8, 17, 20, 5, 52, 45, DateTimeKind.Utc).AddTicks(3122), "Experience the historical city of Mardin", "info@mardintravels.com", null, "00332109876", "www.mardintravels.com" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Activities",
+                columns: new[] { "Id", "ActivityDate", "ActivityName", "Capacity", "CategoryId", "CompanyId", "CreateDate", "Description", "MyUserId", "Price" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2024, 8, 17, 20, 5, 52, 44, DateTimeKind.Utc).AddTicks(4717), "Paragliding", 10, 3, 1, new DateTime(2024, 8, 17, 23, 5, 52, 44, DateTimeKind.Local).AddTicks(4702), "Fly over mountains", null, 150.00m },
+                    { 2, new DateTime(2024, 8, 17, 20, 5, 52, 44, DateTimeKind.Utc).AddTicks(4721), "Canoeing", 8, 1, 4, new DateTime(2024, 8, 17, 23, 5, 52, 44, DateTimeKind.Local).AddTicks(4719), "Explore rivers", null, 100.00m },
+                    { 3, new DateTime(2024, 8, 17, 20, 5, 52, 44, DateTimeKind.Utc).AddTicks(4723), "Hot Air Ballooning", 5, 2, 2, new DateTime(2024, 8, 17, 23, 5, 52, 44, DateTimeKind.Local).AddTicks(4722), "See the world from above", null, 200.00m },
+                    { 4, new DateTime(2024, 8, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), "Scuba Diving", 10, 1, 4, new DateTime(2024, 8, 17, 23, 5, 52, 44, DateTimeKind.Local).AddTicks(4724), "Explore the underwater world", null, 250.00m },
+                    { 5, new DateTime(2024, 8, 30, 0, 0, 0, 0, DateTimeKind.Unspecified), "Boat Tour", 5, 5, 3, new DateTime(2024, 8, 17, 23, 5, 52, 44, DateTimeKind.Local).AddTicks(4727), "Explore the sea", null, 250.00m },
+                    { 6, new DateTime(2024, 9, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "Mountain Climbing", 5, 2, 2, new DateTime(2024, 8, 17, 23, 5, 52, 44, DateTimeKind.Local).AddTicks(4729), "Conquer the peaks", null, 300.00m },
+                    { 7, new DateTime(2024, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "Historical Tour", 20, 4, 4, new DateTime(2024, 8, 17, 23, 5, 52, 44, DateTimeKind.Local).AddTicks(4731), "Discover the ancient ruins", null, 150.00m }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[] { "99c113c8-3358-4c3f-b376-d16ae29476b8", "99c113c8-3358-4c3f-b376-d16ae2947611" });
+
+            migrationBuilder.InsertData(
+                table: "ActivityCity",
+                columns: new[] { "ActivityId", "CityId" },
+                values: new object[,]
+                {
+                    { 1, 1 },
+                    { 1, 4 },
+                    { 2, 3 },
+                    { 3, 9 },
+                    { 4, 4 },
+                    { 5, 2 },
+                    { 5, 4 },
+                    { 6, 6 },
+                    { 6, 9 },
+                    { 7, 1 },
+                    { 7, 10 }
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Activities_CategoryId",
+                table: "Activities",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Activities_CompanyId",
+                table: "Activities",
+                column: "CompanyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Activities_MyUserId",
@@ -379,19 +392,9 @@ namespace ExploreThrill.Entities.Migrations
                 column: "MyUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ActivityCategory_CategoriesId",
-                table: "ActivityCategory",
-                column: "CategoriesId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ActivityCity_CitiesId",
+                name: "IX_ActivityCity_CityId",
                 table: "ActivityCity",
-                column: "CitiesId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ActivityCompany_CompaniesId",
-                table: "ActivityCompany",
-                column: "CompaniesId");
+                column: "CityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -482,45 +485,13 @@ namespace ExploreThrill.Entities.Migrations
                 table: "Companies",
                 column: "Website",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Images_ActivityId",
-                table: "Images",
-                column: "ActivityId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Images_MyUserId",
-                table: "Images",
-                column: "MyUserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Images_Path",
-                table: "Images",
-                column: "Path",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Reviews_ActivityId",
-                table: "Reviews",
-                column: "ActivityId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Reviews_MyUserId",
-                table: "Reviews",
-                column: "MyUserId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ActivityCategory");
-
-            migrationBuilder.DropTable(
                 name: "ActivityCity");
-
-            migrationBuilder.DropTable(
-                name: "ActivityCompany");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -538,25 +509,19 @@ namespace ExploreThrill.Entities.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Images");
-
-            migrationBuilder.DropTable(
-                name: "Reviews");
-
-            migrationBuilder.DropTable(
-                name: "Categories");
+                name: "Activities");
 
             migrationBuilder.DropTable(
                 name: "Cities");
 
             migrationBuilder.DropTable(
-                name: "Companies");
-
-            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Activities");
+                name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "Companies");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

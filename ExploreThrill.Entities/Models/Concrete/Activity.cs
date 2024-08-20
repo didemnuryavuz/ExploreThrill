@@ -11,15 +11,17 @@ namespace ExploreThrill.Entities.Models.Concrete
         public DateTime ActivityDate { get; set; }
 
         #region 1-N
-        public ICollection<Image> Images { get; set; }
-        public ICollection<Review> Reviews { get; set; }
+
+        public int CategoryId { get; set; }
+        public Category Category { get; set; }
+
+        public int CompanyId { get; set; }
+        public Company Company { get; set; }
 
         #endregion
 
         #region N-N
-        public ICollection<City> Cities { get; set; }
-        public ICollection<Category> Categories { get; set; }
-        public ICollection<Company> Companies { get; set; }
+        public ICollection<City>? Cities { get; set; }
 
         #endregion
 

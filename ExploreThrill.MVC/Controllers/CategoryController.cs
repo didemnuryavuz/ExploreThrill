@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ExploreThrill.MVC.Controllers
 {
-    [Authorize(Roles = "AppUser")]
+    //[Authorize(Roles = "AppUser")]
     public class CategoryController : Controller
     {
         private readonly ICategoryManager _categoryManager;
@@ -24,6 +24,7 @@ namespace ExploreThrill.MVC.Controllers
         }
 
         // GET: Category/Details/5
+        [AllowAnonymous]
         public async Task<IActionResult> Details(int id)
         {
             var category = await _categoryManager.GetByAsync(p => p.Id == id);

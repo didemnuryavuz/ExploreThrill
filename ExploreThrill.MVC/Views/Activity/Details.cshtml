@@ -1,15 +1,11 @@
 ﻿@model ExploreThrill.Entities.Models.Concrete.Activity
 
 @{
-    ViewBag.Title = "Delete Activity";
+    ViewBag.Title = "Activity Details";
 }
 
 <div class="container mt-4">
-    <h2 class="text-center mb-4">Delete Activity</h2>
-
-    <div class="alert alert-warning" role="alert">
-        Are you sure you want to delete this activity?
-    </div>
+    <h2 class="text-center mb-4">Activity Details</h2>
 
     <div class="card">
         <div class="card-body">
@@ -18,8 +14,8 @@
             <p class="card-text"><strong>Capacity:</strong> @Model.Capacity</p>
             <p class="card-text"><strong>Price:</strong> @Model.Price.ToString("C")</p>
             <p class="card-text"><strong>Date:</strong> @Model.ActivityDate.ToShortDateString()</p>
-            <p class="card-text"><strong>Category:</strong> @Model.Category?.CategoryName</p>
-            <p class="card-text"><strong>Company:</strong> @Model.Company?.CompanyName</p>
+            <p class="card-text"><strong>Category:</strong> @Model.Category.CategoryName</p>
+            <p class="card-text"><strong>Company:</strong> @Model.Company.CompanyName</p>
             <p class="card-text">
                 <strong>Cities:</strong>
                 @foreach (var city in Model.Cities)
@@ -27,12 +23,8 @@
                 <p class="card-text">@city.Name</p>
                 }
             </p>
-            <form asp-action="DeleteConfirmed" method="post">
-                <input type="hidden" asp-for="Id" />
-                <button type="submit" class="btn btn-danger">Delete</button>
-                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-            </form>
-
+            <a href="@Url.Action("Edit", "Activity", new { id = Model.Id })" class="btn btn-warning">Edit</a>
+            <a href="@Url.Action("Index", "Activity")" class="btn btn-secondary">Back to List</a>
         </div>
     </div>
 </div>

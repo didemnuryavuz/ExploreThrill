@@ -15,16 +15,13 @@ namespace ExploreThrill.MVC.Extensions
             services.AddScoped<ICategoryManager, CategoryManager>();
             services.AddScoped<ICityManager, CityManager>();
             services.AddScoped<ICompanyManager, CompanyManager>();
-            services.AddScoped<IReviewManager, ReviewManager>();
-            services.AddScoped<IImageManager, ImageManager>();
-            //services.AddScoped<IUserManager, UserManager>();
 
 
-            // Burasi Generic Manager siniflari cagirmak icin gereklidir
-            // Eger Entity'mizin iş kurallari yoksa bu yapiyi direk kullanabiliriz
-            //services.AddScoped(typeof(IManager<>), typeof(ManagerBase<>));
 
             return services;
         }
+
+
+
     }
 }
